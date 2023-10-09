@@ -1,8 +1,10 @@
 # CircuitStream 🌐⚡
 
-![CircuitStream Banner](banner.png)
+A universal Language Model relay system, making it seamless to integrate with various models across different platforms! Designed to help developers achieve interoperability without hassles. 
 
-A universal Language Model relay system, making it seamless to integrate with various models across different platforms! Designed to help developers achieve interoperability without hassles. This type of relay is also useful if you're an organization with a single account distributed accross multiple teams or developers as rate limit can be configured at a per model level.
+This type of relay is also useful if you're an organization with a single account distributed accross multiple teams or developers as rate limit can be configured at a per model level.
+
+If you're running tests against multiple LLMs this is also a great way to generate centralized analytics.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![Python](https://img.shields.io/badge/python-v3.8+-blue.svg) ![FastAPI](https://img.shields.io/badge/FastAPI-latest-brightgreen.svg)
 
