@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Analytics</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="model-usage"></div>
+<div id="average-time"></div>
+
+<script>
+    fetch('http://127.0.0.1:8000/analytics')
+    .then(response => response.json())
+    .then(data => {
+        let models = Object.keys(data.model_usage);
+        let usages = Object.values(data.model_usage);
+        let times = models.map(model => data.average_time[model]);
+
+        Plotly.newPlot('model-usage', [{
+            x: models,
+            y: usages,
+            type: 'bar',
+            name: 'Model Volume Usage'
+        }], {
+            title: 'Model Volume Usage'
+        });
+
+        Plotly.newPlot('average-time', [{
+            x: models,
+            y: times,
+            type: 'bar',
+            name: 'Average Time for Request'
+        }], {
+            title: 'Average Time for Request'
+        });
+    })
+    .catch(error => console.error('Error:', error));
+</script>
+
+</body>
+</html>
+
+

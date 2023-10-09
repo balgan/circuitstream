@@ -1,0 +1,20 @@
+# Log files
+successful_requests.log
+error_requests.log
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Virtual environment
+venv/
+*.venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
