@@ -103,12 +103,19 @@ async def call_model(data: CallModel):
         # Preparing data for Langfuse
         model_parameters = {
             "maxTokens": str(params.get("max_tokens", params.get("max_tokens_to_sample", "1000"))),
-            "temperature": model_config.get("temperature", "0.9")  # Check for temperature in the config or default to 0.9
+            "temperature": model_config.get("temperature", "0.9")
         }
-        
-        # Different models might have different formats for prompts
-        prompt_structure = params.get("messages", [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": data.prompt}])
-        
+
+        # Check model type to determine the structure of the prompt
+        model_type = model_config.get("type")
+        if model_type == "chat":
+            prompt_structure = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": data.prompt}]
+        elif model_type == "traditional":
+            prompt_structure = data.prompt
+        else:
+            # Handle other potential model types or raise an exception if needed
+            prompt_structure = data.prompt
+
         # Send generation data to Langfuse
         langfuse.generation(InitialGeneration(
             name=f"{data.model_name}-generation",
