@@ -18,6 +18,8 @@ If you're running tests against multiple LLMs this is also a great way to genera
 - **Analytics**: Dive deep into request analytics with logging and insights.
 ![Analytics](images/analytics.png)
 - **Cross-Origin Resource Sharing (CORS)**: Built-in CORS support, making it browser friendly.
+- **Automated instrumentation of all models**: Automated observability and analytics for all models with Langfuse.
+![Langfuse](images/langfuse.png)
 
 ---
 

@@ -85,7 +85,6 @@ async def call_model(data: CallModel):
         if isinstance(value, str):
             params[key] = value.replace("$PROMPT", data.prompt)
         elif isinstance(value, list) and "$PROMPT" in str(value):
-            # If '$PROMPT' is detected in a list, replace it with the appropriate structured format
             new_messages = []
             for item in value:
                 if item == "$PROMPT":
@@ -104,7 +103,7 @@ async def call_model(data: CallModel):
         # Preparing data for Langfuse
         model_parameters = {
             "maxTokens": str(params.get("max_tokens", params.get("max_tokens_to_sample", "1000"))),
-            "temperature": model_config.get("temperature", "0.9")
+            "temperature": model_config.get("temperature", "0.9")  # Check for temperature in the config or default to 0.9
         }
         
         # Different models might have different formats for prompts
@@ -120,7 +119,7 @@ async def call_model(data: CallModel):
             prompt=prompt_structure,
             completion=response.text,  # or response.json() depending on the expected format
             usage=Usage(promptTokens=len(data.prompt.split()), completionTokens=len(response.text.split())),
-            metadata={"interface": "api"}  # You can customize this as per your application
+            metadata={"interface": "api"}
         ))
         
         success_log.info(f"Successful request for model {data.model_name}: {response.json()}")
@@ -128,6 +127,7 @@ async def call_model(data: CallModel):
     except Exception as e:
         error_log.error(f"Error for model {data.model_name}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
     
 @app.get("/listmodels")
