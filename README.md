@@ -48,12 +48,22 @@ pip install -r requirements.txt
 
 4. Modify the `config.json` file to match your desired configuration for various language models and platforms.
 
-5. Run the relay:
+5. Create create a `secrets.json` with your langfuse configuration with the following format:
+
+```
+{
+    "ENV_PUBLIC_KEY": "pk-XXX",
+    "ENV_SECRET_KEY": "sk-XXX",
+    "ENV_HOST": "http://xxx.xxx.xxx.xxx"
+}
+```
+
+6. Run the relay:
 ```bash
 python llm_relay.py
 ```
 
-6. Run a webserver to view the index:
+7. Run a webserver to view the index:
 ```bash
 python -m http.server 8081
 ```

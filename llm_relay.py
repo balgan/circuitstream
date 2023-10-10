@@ -4,8 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import requests
 import json
 import logging
-import time  # <-- New import for tracking request time
+import time 
 import re
+from langfuse import Langfuse
+from datetime import datetime
+from langfuse.model import InitialGeneration, Usage
+
 app = FastAPI()
 
 # Enable CORS for all origins
@@ -20,6 +24,14 @@ app.add_middleware(
 # Load configuration from external file
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
+
+# Load secrets for Langfuse configuration
+with open("secrets.json", "r") as f:
+    SECRETS = json.load(f)
+
+# Initialize Langfuse
+langfuse = Langfuse(SECRETS['ENV_PUBLIC_KEY'], SECRETS['ENV_SECRET_KEY'], SECRETS['ENV_HOST'])
+
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
@@ -83,12 +95,40 @@ async def call_model(data: CallModel):
             params[key] = new_messages
 
     try:
+        generationStartTime = datetime.now()  # Start timer for Langfuse
+        
         response = requests.post(model_config["endpoint"], headers=headers, json=params)
+        
+        generationEndTime = datetime.now()  # End timer for Langfuse
+        
+        # Preparing data for Langfuse
+        model_parameters = {
+            "maxTokens": str(params.get("max_tokens", params.get("max_tokens_to_sample", "1000"))),
+            "temperature": model_config.get("temperature", "0.9")
+        }
+        
+        # Different models might have different formats for prompts
+        prompt_structure = params.get("messages", [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": data.prompt}])
+        
+        # Send generation data to Langfuse
+        langfuse.generation(InitialGeneration(
+            name=f"{data.model_name}-generation",
+            startTime=generationStartTime,
+            endTime=generationEndTime,
+            model=data.model_name,
+            modelParameters=model_parameters,
+            prompt=prompt_structure,
+            completion=response.text,  # or response.json() depending on the expected format
+            usage=Usage(promptTokens=len(data.prompt.split()), completionTokens=len(response.text.split())),
+            metadata={"interface": "api"}  # You can customize this as per your application
+        ))
+        
         success_log.info(f"Successful request for model {data.model_name}: {response.json()}")
         return response.json()
     except Exception as e:
         error_log.error(f"Error for model {data.model_name}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
     
 @app.get("/listmodels")
 async def list_models():
