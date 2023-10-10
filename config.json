@@ -1,55 +1,75 @@
 {
-    "anthropic": {
-      "claude-2": {
-        "type": "traditional",
-        "endpoint": "https://api.anthropic.com/v1/complete",
-        "rate_limit": 1,
-        "headers": {
-          "Content-Type": "application/json",
-          "accept": "application/json",
-          "anthropic-version": "2023-06-01",
-          "x-api-key": "$API_TOKEN"
-        },
-        "params": {
-          "model": "claude-2",
-          "prompt": "$PROMPT",
-          "max_tokens_to_sample": 256
-        }
+  "anthropic": {
+    "claude-2": {
+      "type": "traditional",
+      "endpoint": "https://api.anthropic.com/v1/complete",
+      "rate_limit": 1,
+      "headers": {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "$API_TOKEN"
+      },
+      "params": {
+        "model": "claude-2",
+        "prompt": "$PROMPT",
+        "max_tokens_to_sample": 256
+      }
+    }
+  },
+  "openai": {
+    "gpt-4": {
+      "type": "chat",
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "rate_limit": 1,
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $API_TOKEN"
+      },
+      "params": {
+        "model": "gpt-4",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a helpful assistant."
+          },
+          "$PROMPT"
+        ]
       }
     },
-    "openai": {
-      "gpt-4": {
-        "type": "chat",
-        "endpoint": "https://api.openai.com/v1/chat/completions",
-        "rate_limit": 1,
-        "headers": {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $API_TOKEN"
-        },
-        "params": {
-          "model": "gpt-4",
-          "messages": [
-            {"role": "system", "content": "You are a helpful assistant."},
-            "$PROMPT"
-        ]      
-        }
+    "gpt-3.5-turbo": {
+      "type": "chat",
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "rate_limit": 1,
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $API_TOKEN"
       },
-      "gpt-3.5-turbo": {
-        "type": "chat",
-        "endpoint": "https://api.openai.com/v1/chat/completions",
-        "rate_limit": 1,
-        "headers": {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $API_TOKEN"
-        },
-        "params": {
-          "model": "gpt-3.5-turbo",
-          "messages": [
-            {"role": "system", "content": "You are a helpful assistant."},
-            "$PROMPT"
-        ]    
-        }
+      "params": {
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a helpful assistant."
+          },
+          "$PROMPT"
+        ]
+      }
+    }
+  },
+  "gooseai": {
+    "gpt-j-6b": {
+      "type": "traditional",
+      "endpoint": "https://api.goose.ai/v1/engines/gpt-j-6b/completions",
+      "rate_limit": 1,
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $API_TOKEN"
+      },
+      "params": {
+        "prompt": "$PROMPT",
+        "max_tokens": 25
       }
     }
   }
-  
+}
