@@ -18,3 +18,5 @@ env/
 .idea/
 *.swp
 
+# OS files
+.DS_Store
